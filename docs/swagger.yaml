@@ -1,0 +1,152 @@
+swagger: "2.0"
+info:
+  description: "API для управления библиотекой песен."
+  version: "1.0"
+  title: "Online Music Library API"
+  contact:
+    name: "API Support"
+    url: "http://www.swagger.io/support"
+    email: "support@swagger.io"
+host: "localhost:8080"
+basePath: "/"
+schemes:
+  - "http"
+paths:
+  /songs:
+    get:
+      summary: "Получить список песен"
+      description: "Возвращает список всех песен"
+      tags:
+        - "songs"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Song"
+        500:
+          description: "Ошибка сервера"
+    post:
+      summary: "Создать новую песню"
+      description: "Создает новую песню в библиотеке"
+      tags:
+        - "songs"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "song"
+          description: "Данные песни"
+          required: true
+          schema:
+            $ref: "#/definitions/Song"
+      responses:
+        200:
+          description: "Песня успешно создана"
+          schema:
+            $ref: "#/definitions/Song"
+        400:
+          description: "Неверный формат данных"
+        500:
+          description: "Ошибка сервера"
+  /songs/{id}:
+    get:
+      summary: "Получить песню по ID"
+      description: "Возвращает песню по её идентификатору"
+      tags:
+        - "songs"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          type: "integer"
+          description: "ID песни"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/Song"
+        404:
+          description: "Песня не найдена"
+        500:
+          description: "Ошибка сервера"
+    put:
+      summary: "Обновить песню по ID"
+      description: "Обновляет информацию о песне по её идентификатору"
+      tags:
+        - "songs"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          type: "integer"
+          description: "ID песни"
+        - in: "body"
+          name: "song"
+          description: "Обновленные данные песни"
+          required: true
+          schema:
+            $ref: "#/definitions/Song"
+      responses:
+        200:
+          description: "Песня успешно обновлена"
+          schema:
+            $ref: "#/definitions/Song"
+        400:
+          description: "Неверный формат данных"
+        404:
+          description: "Песня не найдена"
+        500:
+          description: "Ошибка сервера"
+    delete:
+      summary: "Удалить песню по ID"
+      description: "Удаляет песню из базы данных по её идентификатору"
+      tags:
+        - "songs"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          type: "integer"
+          description: "ID песни"
+      responses:
+        204:
+          description: "Песня удалена"
+        404:
+          description: "Песня не найдена"
+        500:
+          description: "Ошибка сервера"
+definitions:
+  Song:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        example: 1
+      group:
+        type: "string"
+        example: "Muse"
+      title:
+        type: "string"
+        example: "Supermassive Black Hole"
+      releaseDate:
+        type: "string"
+        format: "date"
+        example: "2006-07-16"
+      text:
+        type: "string"
+        example: "Ooh baby, don't you know I suffer?"
+      link:
+        type: "string"
+        example: "http://localhost:8080/swagger/index.html"
